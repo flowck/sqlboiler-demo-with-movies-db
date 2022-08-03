@@ -1,0 +1,2 @@
+[psql]
+blacklist = ["goose_db_version"]

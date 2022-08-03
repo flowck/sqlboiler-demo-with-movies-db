@@ -1,0 +1,63 @@
+version: '3'
+
+env:
+  ENV: test
+
+dotenv: ['.env', '{{.ENV}}/.env.', '{{.HOME}}/.env']
+
+tasks:
+  run:dev:
+    cmds:
+      - reflex -r '\.go' -s -- sh -c 'go run ./'
+
+  build:
+    cmds:
+      - go build -o sqlboiler_demo ./
+
+  goose:
+    cmds:
+      - goose -dir ./sql/migrations create {{.CLI_ARGS}} sql
+
+  goose:down:
+    cmds:
+      - goose -dir ./sql/migrations down
+
+  goose:up:
+    cmds:
+      - goose -dir ./sql/migrations up
+
+  goose:seed:
+    cmds:
+      - goose -dir ./sql/seeds create {{.CLI_ARGS}} sql
+
+  goose:seed:down:
+    cmds:
+      - goose -dir ./sql/seeds down
+
+  goose:seed:up:
+    cmds:
+      - goose -dir ./sql/seeds up
+
+  docker:build:
+    cmds:
+      - docker build -t sqlboiler_demo:0.0.1-alpha .
+
+  docker:push:
+    cmds:
+      - docker push sqlboiler_demo:0.0.1-alpha
+
+  docker:run:
+    cmds:
+      - docker run --rm -p 4000:4000 -e PORT=4000 -e ENVIRONMENT=staging sqlboiler_demo:0.0.1-alpha
+
+  docker:up:
+    cmds:
+      - docker-compose up -d
+
+  docker:down:
+    cmds:
+      - docker-compose down
+
+  sqlboiler:
+    cmds:
+      - sqlboiler psql;

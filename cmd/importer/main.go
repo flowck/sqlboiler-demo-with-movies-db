@@ -163,7 +163,7 @@ func main() {
 			fail(err)
 		}
 
-		if currentLine == 10 {
+		if currentLine == 10000 {
 			break
 		}
 
